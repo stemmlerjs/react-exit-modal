@@ -138,10 +138,7 @@ export class ExitModal extends React.Component {
     } = this.props;
 
     return (
-      <div style={{
-        display: this.state.visible ? 'auto' : 'none'
-      }}>
-        <Rodal 
+      <Rodal 
           animation={animation}
           showMask={showMask}
           className={className ? className : 'exit-modal'}
@@ -151,7 +148,6 @@ export class ExitModal extends React.Component {
           onClose={this.hide.bind(this)}>
           { this.props.children }
         </Rodal>
-      </div>
     )
   }
 }
