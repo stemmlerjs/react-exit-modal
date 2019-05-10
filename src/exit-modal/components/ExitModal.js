@@ -101,7 +101,6 @@ export class ExitModal extends React.Component {
     const { modalShown } = this.state;
     const time = new Date();
     const hasAlreadyPresentedModal = this.hasAlreadyPresentedModal();
-    debugger;
 
     if (hasAlreadyPresentedModal) {
       return;
