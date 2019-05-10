@@ -15,12 +15,21 @@ npm install --save react-exit-modal
 ```jsx
 import React, { Component } from 'react'
 
-import { ExitModal } from 'react-exit-modal'
+import { ExitModal, ExitModalAnimations } from 'react-exit-modal'
+import 'rodal/lib/rodal.css';
 
 class Example extends Component {
   render () {
     return (
-      <ExitModal>
+      <ExitModal
+        minimumSecondsOnPage={3},
+        animation={ExitModalAnimations.ZOOM}
+        showMask={true}
+
+        // unique name to describe the modal
+        modalName={'landing-page-signup-modal'} 
+        modalExpiryHours={12} // 
+      >
         <div>Your content</div>
       </ExitModal>
     )

@@ -10,7 +10,9 @@ export class ExitModal extends React.Component {
   static defaultProps = {
     minimumSecondsOnPage: 5,
     animation: ExitModalAnimations.ZOOM,
-    showMask: true
+    showMask: true,
+    modalName: 'exit-modal',
+    modalExpiryHours: 12
   }
   
   constructor (props) {
@@ -37,10 +39,54 @@ export class ExitModal extends React.Component {
     })
   }
 
+  saveEventToLocalStorage = () => {
+    if (typeof window !== undefined) { 
+      window.localStorage.setItem(
+        this.props.modalName, 
+        JSON.stringify({ dispatchTime: new Date() })
+      )
+    }
+  }
+
+  getDateDispatched = () => {
+    if (typeof window !== undefined) {
+      try {
+        const raw = window.localStorage.getItem(this.props.modalName);
+        const event = JSON.parse(raw);
+        const { dispatchTime } = event;
+        return new Date(dispatchTime);
+      } catch (err) {
+        return null;
+      }
+    }
+  }
+
+  hasAlreadyPresentedModal = () => {
+    const dateDispatched = this.getDateDispatched();
+    const expiryTimeThresh = 1000 * 60 * 60 * this.modalExpiryHours;
+
+    if (dateDispatched) {
+      const date = new Date();
+      const expiryTime = date.getTime() - dateDispatched.getTime();
+
+      if (expiryTime >= expiryTimeThresh) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+
   onExitIntent = () => {
     const { modalShown } = this.state;
     const time = new Date();
+    const hasAlreadyPresentedModal = this.hasAlreadyPresentedModal();
 
+    if (hasAlreadyPresentedModal) {
+      return;
+    }
+    
     const delta = time.getTime() - this.state.timeMounted.getTime();
     const shouldPresentModal = delta >= (this.props.minimumSecondsOnPage * 1000);
 
@@ -60,6 +106,7 @@ export class ExitModal extends React.Component {
 
   hide () {
     this.setState({ visible: false });
+    this.saveEventToLocalStorage();
   }
 
   render () {
@@ -90,5 +137,7 @@ ExitModal.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   minimumSecondsOnPage: PropTypes.number,
-  animation: PropTypes.string
+  animation: PropTypes.string,
+  modalName: PropTypes.string,
+  modalExpiryHours: PropTypes.number
 }
