@@ -13,7 +13,9 @@ export class ExitModal extends React.Component {
     showMask: true,
     modalName: 'exit-modal',
     modalExpiryHours: 12,
-    className: ''
+    className: '',
+    mobileTimerSeconds: 15,
+    showOnMobile: true
   }
   
   constructor (props) {
@@ -33,11 +35,27 @@ export class ExitModal extends React.Component {
     })
   }
 
+  isMobile = () => {
+    if (typeof window.navigator !== 'undefined') {
+      if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   componentDidMount = () => {
     this.setState({
       ...this.state,
       timeMounted: new Date()
-    })
+    });
+
+    if (this.isMobile() && this.props.showOnMobile) {
+      console.log(`Displaying modal in ${this.props.mobileTimerSeconds} seconds.`)
+      setTimeout(() => {
+        this.onExitIntent();
+      }, this.props.mobileTimerSeconds * 1000)
+    }
   }
 
   saveEventToLocalStorage = () => {
@@ -83,6 +101,7 @@ export class ExitModal extends React.Component {
     const { modalShown } = this.state;
     const time = new Date();
     const hasAlreadyPresentedModal = this.hasAlreadyPresentedModal();
+    debugger;
 
     if (hasAlreadyPresentedModal) {
       return;
@@ -142,5 +161,7 @@ ExitModal.propTypes = {
   animation: PropTypes.string,
   modalName: PropTypes.string,
   modalExpiryHours: PropTypes.number,
-  className: PropTypes.string
+  className: PropTypes.string,
+  mobileTimerSeconds: PropTypes.number,
+  showOnMobile: PropTypes.bool
 }
