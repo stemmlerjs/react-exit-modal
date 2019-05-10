@@ -1,0 +1,8 @@
+{
+  "short_name": "react-exit-modal",
+  "name": "react-exit-modal",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
