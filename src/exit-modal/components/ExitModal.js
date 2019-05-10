@@ -12,7 +12,8 @@ export class ExitModal extends React.Component {
     animation: ExitModalAnimations.ZOOM,
     showMask: true,
     modalName: 'exit-modal',
-    modalExpiryHours: 12
+    modalExpiryHours: 12,
+    className: ''
   }
   
   constructor (props) {
@@ -114,14 +115,15 @@ export class ExitModal extends React.Component {
       width,
       height,
       animation,
-      showMask
+      showMask,
+      className
     } = this.props;
 
     return (
       <Rodal 
         animation={animation}
         showMask={showMask}
-        className="exit-modal"
+        className={className ? className : 'exit-modal'}
         width={width ? width : 400}
         height={height ? height : 240}
         visible={this.state.visible} 
@@ -139,5 +141,6 @@ ExitModal.propTypes = {
   minimumSecondsOnPage: PropTypes.number,
   animation: PropTypes.string,
   modalName: PropTypes.string,
-  modalExpiryHours: PropTypes.number
+  modalExpiryHours: PropTypes.number,
+  className: PropTypes.string
 }
